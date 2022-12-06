@@ -1,1 +1,1 @@
-My first Devops project
+This is my shell redirections project
