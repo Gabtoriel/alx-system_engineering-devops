@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # prints the current user processes in a user defined format
 
-ps -eF
+ps u -e 1
