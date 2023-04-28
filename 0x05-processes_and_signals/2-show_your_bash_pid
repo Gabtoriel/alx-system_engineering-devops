@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 # prints the current user processes in a user defined format
+# shellcheck disable=SC2009
 
-ps
+ps -FT
