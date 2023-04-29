@@ -2,4 +2,4 @@
 # prints the current user processes in a user defined format
 # shellcheck disable=SC2009
 
-ps -eFT
+ps axu -ejH | grep bash
