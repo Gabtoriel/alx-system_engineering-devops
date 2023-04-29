@@ -4,5 +4,6 @@
 s="To infinity and beyond"
 
 while true;do
-    echo "$s";
+    echo "$s"
+    sleep 2
 done
