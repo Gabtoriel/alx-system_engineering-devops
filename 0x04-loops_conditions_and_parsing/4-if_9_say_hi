@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Program to print a string 10 times with a while loop and if statement
+
+s="Best School"
+i=0
+
+while [ "$i" -lt 10 ]; do
+    if [ "$i" -eq 8 ]; then
+        echo "$s"
+	echo "Hi"
+    else
+        echo "$s"
+    fi
+    i=$((i + 1));
+done

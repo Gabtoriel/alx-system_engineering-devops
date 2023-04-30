@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Program to display a clock in textual format
+
+hour=0
+
+while [ $hour -le 12 ]; do
+    echo "Hour: $hour"
+    min=1
+    while [ $min -le 59 ]; do
+        echo "$min"
+	min=$((min + 1))
+    done
+    hour=$((hour + 1))
+done

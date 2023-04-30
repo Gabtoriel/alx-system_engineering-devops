@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Program to print a string 10 times using the until bash looping construct
+
+s="Best School"
+i=10
+
+until [ "$i" -lt 1 ]; do
+    echo "$s"
+    i=$((i - 1));
+done
