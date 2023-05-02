@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Bash program that prints a string in an infinite loop and displays a message when 
+# the SIGTERM signal is detected
+
+while true; do
+    echo "To infinity and beyond"
+    sleep 2
+    trap 'echo "I am invincible!!!"' SIGTERM
+done

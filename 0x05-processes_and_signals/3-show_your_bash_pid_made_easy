@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Program to display a process that contains bash in its name and its corressponding pid
+
+pgrep -l bash

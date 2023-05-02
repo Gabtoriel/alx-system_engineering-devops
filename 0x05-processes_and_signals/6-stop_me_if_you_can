@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# A program that stops a process with out the use of kill and killall
+
+pkill 4-to_infinity_and_beyond -f
