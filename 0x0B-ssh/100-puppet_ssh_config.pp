@@ -3,7 +3,7 @@
 file_line { 'no_passwd':
   ensure => 'present',
   path   => '/home/viclins_t/.ssh_config',
-  line   => 'Host *\n    PasswordAuthentication = no'
+  line   => 'PasswordAuthentication = no'
 }
 
 file_line { 'private_key':
