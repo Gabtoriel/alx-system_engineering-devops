@@ -2,12 +2,12 @@
 
 file_line { 'no_passwd':
   ensure => 'present',
-  path   => '/etc/ssh/ssh_config',
+  path   => '/home/viclins_t/.ssh_config',
   line   => 'Host *\n    PasswordAuthentication = no'
 }
 
 file_line { 'private_key':
   ensure => 'present',
-  path   => '/etc/ssh/ssh_config',
+  path   => '/home/viclins_t/.ssh/ssh_config',
   line   => 'IdentityFile = ~/.ssh/school'
 }
