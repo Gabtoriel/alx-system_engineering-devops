@@ -2,5 +2,5 @@
 
 file { 'file_line':
   ensure => 'present'
-  path   => '~/.ssh/school'
+  path   => '$HOME/.ssh/school'
   content => 'Host *\n    PasswordAuthentiction = no\nIdentityFile = ~/.ssh/school'
