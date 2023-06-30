@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Bash script to configure the nginx server for a 301 redirect
+apt-get -y update
+apt-get -y nginx
+echo 'Hello World' > /var/www/html/index.nginx-debian.html
+redirect = "/server_name _;/a \\n\trewrite ^\/redirect_me \/ permanent;"
+sed -i $redirect /etc/nginx/sites-available/default
+service nginx start
