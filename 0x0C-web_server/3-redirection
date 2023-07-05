@@ -2,7 +2,7 @@
 # Bash script to configure the nginx server for a 301 redirect
 sudo apt-get -y update
 sudo apt-get -y nginx
-echo 'Hello World' > /var/www/html/index.nginx-debian.html
+echo 'Hello World!' > /var/www/html/index.nginx-debian.html
 replace='s.server_name _;.server_name _;\n\n\tlocation = /redirect_me {\n\t\treturn 301 https://www\.youtube\.com/watch?v=QH2-TGU1wu4;\n\t}.'
 sed -i "$replace" /etc/nginx/sites-available/default
 sudo service nginx restart
