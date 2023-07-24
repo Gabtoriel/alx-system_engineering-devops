@@ -1,22 +1,23 @@
 #!/usr/bin/env bash
 # Bash script to configure the nginx server for a 301 redirect
-#sudo apt-get update
-#sudo apt-get install -y nginx
+sudo apt-get update
+sudo apt-get install -y nginx
+sudo ufw allow 'Nginx HTTP'
 echo 'Hello World' > /var/www/html/index.nginx-debian.html
 echo "Ceci n'est pas une page" > /var/www/html/custom404error.html
 
 Hostname=$HOSTNAME
 
 printf 'server {
-	listen 80 default_server;
+	listen 80;
 	listen [::]:80 default_server;
 
         server_name _;
 
+	error_page 404 /custom404error.html;
 
-        error_page 404 /custom404error.html;
-
-        location /custom404error.html {
+        location = /custom404error.html {
+		root /var/www/html;
                 internal;
         }
         root /var/www/html;
@@ -35,10 +36,7 @@ printf 'server {
                 try_files $uri $uri/ =404;
         }
 
-	location =404 {
-		add_header X-Served-By %s;
-	}
-}' "$Hostname" "$Hostname" "$Hostname" > /etc/nginx/sites-available/default
+}' "$Hostname" "$Hostname" > /etc/nginx/sites-available/default
 
 sudo service nginx stop 
 sudo service nginx start
