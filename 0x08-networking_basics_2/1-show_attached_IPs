@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# script to print the active network interfaces of an ubuntu system
+
+ifconfig -a
