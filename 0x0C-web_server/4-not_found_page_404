@@ -2,11 +2,11 @@
 # Bash script to configure the nginx server for a 301 redirect
 sudo apt-get update
 sudo apt-get install -y nginx
-sudo sed -i 's/listen.*80 default server/listen 80 default_server;\n\tlisten [::]:80 default_server/' /etc/nginx/sites-enabled/default
+sudo sed -i 's/listen.*80 default server/listen 80 default_server;\n\tlisten [::]:80 default_server/' /etc/nginx/sites-available/default
 echo 'Hello World' > /var/www/html/index.nginx-debian.html
 echo "Ceci n'est pas une page" > /var/www/html/custom404error.html
-sudo sed -i 's/server_name _;/server_name _;\n\terror_page 404 \/custom404error.html;\n\n\tlocation \/custom404error.html {\n\t\troot /var/www/html;\n\t\tinternal;\n\t}/' /etc/nginx/sites-enabled/default
+sudo sed -i 's/server_name _;/a \n\terror_page 404 \/custom404error.html;\n\n\tlocation \/custom404error.html {\n\t\troot /var/www/html;\n\t\tinternal;\n\t}/' /etc/nginx/sites-available/default
 replace='s.server_name _;.server_name _;\n\n\tlocation ~ /redirect_me {\n\t\treturn 301 https://www\.youtube\.com/watch?v=QH2-TGU1wu4;\n\t}.'
-sudo sed -i "$replace" /etc/nginx/sites-enabled/default
+sudo sed -i "$replace" /etc/nginx/sites-available/default
 sudo service nginx stop
 sudo service nginx start
