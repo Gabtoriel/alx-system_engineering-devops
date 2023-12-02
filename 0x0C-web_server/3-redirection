@@ -1,10 +1,23 @@
 #!/usr/bin/env bash
 # Bash script to configure the nginx server for a 301 redirect
-sudo apt-get -y update
+sudo apt-get update
 sudo apt-get install -y nginx
-sudo sed -i 's/listen.*80 default server/listen 80 default_server;\n\tlisten [::]:80 default_server/' /etc/nginx/sites-available/default
-echo 'Hello World!' > /var/www/html/index.nginx-debian.html
-replace='s.server_name _;.server_name _;\n\n\tlocation ~ /redirect_me {\n\t\treturn 301 https://www\.youtube\.com/watch?v=QH2-TGU1wu4;\n\t}.'
-sudo sed -i "$replace" /etc/nginx/sites-available/default
+echo 'Hello World' > /var/www/html/index.html
+config="server {
+	listen 80 default_server;
+        listen [::]:80 default_server;
+
+        server_name _;
+
+	root /var/www/html;
+	index index.html index.htm index.nginx-debian.html;
+
+	add_header X-Served-By viclinstoriel;
+
+	location /redirect_me {
+                return 301 https://www.youtube.com/watch?v=QH2-TGU1wu4;
+        }
+}"
+echo $config > /etc/nginx/sites-available/default
 sudo service nginx stop
 sudo service nginx start
