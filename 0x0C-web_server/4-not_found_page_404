@@ -4,7 +4,8 @@ sudo apt-get update
 sudo apt-get install -y nginx
 echo 'Hello World' > /var/www/html/index.html
 echo "Ceci n'est pas une page" > /var/www/html/custom404error.html
-config='server {
+cat << _EOF_ > /etc/nginx/sites-available/default
+server {
 	listen 80 default_server;
         listen [::]:80 default_server;
 
@@ -13,14 +14,18 @@ config='server {
 	root /var/www/html;
 	index index.html index.htm index.nginx-debian.html;
 
-	add_header X-Served-By viclinstoriel;
+	add_header X-Served-By $HOSTNAME;
 
 	location /redirect_me {
                 return 301 https://www.youtube.com/watch?v=QH2-TGU1wu4;
         }
 
 	error_page 404 /custom404error.html;
-}'
-echo $config > /etc/nginx/sites-available/default
+	location = /custom404error.html {
+		root /var/www/html;
+		internal;
+	}
+}
+_EOF_
 sudo service nginx stop
 sudo service nginx start
