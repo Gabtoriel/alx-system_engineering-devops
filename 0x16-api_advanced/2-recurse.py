@@ -1,30 +1,48 @@
 #!/usr/bin/python3
-"""Function to query a list of all hot posts on a given Reddit subreddit."""
+"""
+recursive function for the reddit api query
+returns a list containing the titles of all
+hot articles for a given subreddit
+"""
 import requests
 
 
-def recurse(subreddit, hot_list=[], after="", count=0):
-    """Returns a list of titles of all hot posts on a given subreddit."""
-    url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
-    headers = {
-        "User-Agent": "linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)"
-    }
-    params = {
-        "after": after,
-        "count": count,
-        "limit": 100
-    }
-    response = requests.get(url, headers=headers, params=params,
-                            allow_redirects=False)
-    if response.status_code == 404:
+def recurse(subreddit, hot_list=None, after=None):
+    if hot_list is None:
+        hot_list = []
+
+    """Defines the Reddit API URL for the subreddit's hot posts"""
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=25"
+
+    """Adds 'after' parameter if it's provided"""
+    if after:
+        url += f'&after={after}'
+
+    """Sets a custom User-Agent to avoid Reddit API request issues"""
+    headers = {'User-Agent': 'YourBotName/1.0'}
+
+    """Sends a GET request to the API"""
+    response = requests.get(url, headers=headers)
+
+    """Checks if the response status code indicates success"""
+    if response.status_code == 200:
+        try:
+            """Parse the JSON response"""
+            data = response.json()
+            posts = data['data']['children']
+            after = data['data']['after']
+
+            if not posts:
+                return hot_list
+            else:
+                for post in posts:
+                    hot_list.append(post['data']['title'])
+
+                """Recursively call the function with the 'after' parameter"""
+                return recurse(subreddit, hot_list, after)
+        except (KeyError, ValueError):
+            """Handle JSON parsing errors"""
+            return None
+    else:
+        """Invalid subreddit or another issue with the request"""
         return None
-
-    results = response.json().get("data")
-    after = results.get("after")
-    count += results.get("dist")
-    for c in results.get("children"):
-        hot_list.append(c.get("data").get("title"))
-
-    if after is not None:
-        return recurse(subreddit, hot_list, after, count)
-    return hot_list

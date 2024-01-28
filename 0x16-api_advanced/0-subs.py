@@ -1,27 +1,33 @@
 #!/usr/bin/python3
 """
-number of subscribers for a given subreddit
+function that queries the reddit api and
+returns the number of subscribers (not active
+users, total subscribers) for a given subreddit
 """
-
-from requests import get
+import requests
 
 
 def number_of_subscribers(subreddit):
-    """
-    function that queries the Reddit API and returns the number of subscribers
-    (not active users, total subscribers) for a given subreddit.
-    """
+    """Defines the Reddit API URL for the subreddit's about page"""
+    url = f"https://www.reddit.com/r/{subreddit}/about.json"
 
-    if subreddit is None or not isinstance(subreddit, str):
-        return 0
+    """Sets a custom User-Agent to avoid Reddit API request issues"""
+    headers = {'User-Agent': 'YourBotName/1.0'}
 
-    user_agent = {'User-agent': 'Google Chrome Version 81.0.4044.129'}
-    url = 'https://www.reddit.com/r/{}/about.json'.format(subreddit)
-    response = get(url, headers=user_agent)
-    results = response.json()
+    """Sends a GET request to the API"""
+    response = requests.get(url, headers=headers)
 
-    try:
-        return results.get('data').get('subscribers')
-
-    except Exception:
+    """Checks if the response status code indicates success"""
+    if response.status_code == 200:
+        try:
+            """Parses the JSON response"""
+            data = response.json()
+            """Extracts the number of subscribers"""
+            subscribers = data['data']['subscribers']
+            return subscribers
+        except (KeyError, ValueError):
+            """Handles JSON parsing errors"""
+            return 0
+    else:
+        """Invalid subreddit or another issue with the request"""
         return 0

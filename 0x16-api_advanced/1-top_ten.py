@@ -1,33 +1,37 @@
 #!/usr/bin/python3
-
 """
-prints the titles of the first 10 hot posts listed for a given subreddit
+A function that queries the reddit api and
+prints the titles of the 10 trending post.
 """
-
-from requests import get
+import requests
 
 
 def top_ten(subreddit):
-    """
-    function that queries the Reddit API and prints the titles of the first
-    10 hot posts listed for a given subreddit
-    """
+    """Defines the Reddit API URL for the subreddit's hot posts"""
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
 
-    if subreddit is None or not isinstance(subreddit, str):
-        print("None")
+    """Sets a custom User-Agent to avoid Reddit API request issues"""
+    headers = {'User-Agent': 'YourBotName/1.0'}
 
-    user_agent = {'User-agent': 'Google Chrome Version 81.0.4044.129'}
-    params = {'limit': 10}
-    url = 'https://www.reddit.com/r/{}/hot/.json'.format(subreddit)
+    """Sends a GET request to the API"""
+    response = requests.get(url, headers=headers)
 
-    response = get(url, headers=user_agent, params=params)
-    results = response.json()
+    """Checks if the response status code indicates success"""
+    if response.status_code == 200:
+        try:
+            """Parses the JSON response"""
+            data = response.json()
+            posts = data['data']['children']
 
-    try:
-        my_data = results.get('data').get('children')
-
-        for i in my_data:
-            print(i.get('data').get('title'))
-
-    except Exception:
+            if not posts:
+                print("No hot posts found for this subreddit.")
+            else:
+                for index, post in enumerate(posts):
+                    """Extracts and print the title of each post"""
+                    print(f"{post['data']['title']}")
+        except (KeyError, ValueError):
+            """Handles JSON parsing errors"""
+            print("Error parsing the Reddit API response.")
+    else:
+        """Invalid subreddit or another issue with the request"""
         print("None")
